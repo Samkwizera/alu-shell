@@ -8,16 +8,16 @@ start_process() {
   if [ -f "$pidfile" ]; then
     echo "$process_name is already running."
   else
-    ./$process_name &
-    echo $! > "$pidfile"
+    ./$process_name &  # Start manage_my_process in the background
+    echo $! > "$pidfile"  # Write the PID to the PID file
     echo "$process_name started"
   fi
 }
 
 stop_process() {
   if [ -f "$pidfile" ]; then
-    kill "$(cat "$pidfile")"
-    rm -f "$pidfile"
+    kill "$(cat "$pidfile")"  # Kill the process using the PID from the file
+    rm -f "$pidfile"  # Remove the PID file
     echo "$process_name stopped"
   else
     echo "$process_name is not running."
@@ -25,11 +25,12 @@ stop_process() {
 }
 
 restart_process() {
-  stop_process
-  start_process
+  stop_process  # Stop the process first
+  start_process  # Then start it again
   echo "$process_name restarted"
 }
 
+# Handle command-line arguments
 case "$1" in
   start)
     start_process
@@ -45,3 +46,4 @@ case "$1" in
     exit 1
     ;;
 esac
+
